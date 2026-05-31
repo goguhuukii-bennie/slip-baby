@@ -168,7 +168,7 @@
                         
                         <div class="aspect-square w-full bg-amber-50/40 border border-dashed border-amber-900/20 flex items-center justify-center overflow-hidden rounded-md">
                             <span id="txtLogoPlaceholder" class="text-[10px] text-center text-amber-950/40 font-bold px-1">✨ คลิกใส่รูป LOGO</span>
-                            <img id="imgLogo" class="w-full h-full object-cover hidden" alt="Shop Logo">
+                            <img id="imgLogo" class="w-full h-full object-cover hidden" alt="Shop Logo" crossOrigin="anonymous">
                         </div>
                         <div class="text-center text-[9px] font-bold text-gray-400 mt-1 handwritten">@shop_owner</div>
                     </div>
@@ -232,12 +232,12 @@
                     </div>
 
                     <div class="col-span-6 flex justify-end">
-                        <div class="bg-white border border-gray-300 p-1.5 pb-4 shadow-xl transform rotate-3 w-36 relative hover:rotate-0 transition duration-300">
+                        <div class="bg-white border border-gray-300 p-1.5 pb-4 shadow-xl transform rotate-3 w-24 relative hover:rotate-0 transition duration-300">
                             <div class="absolute -top-2 left-3 w-7 h-3 bg-emerald-200/40 border border-emerald-300/20 -rotate-12"></div>
                             
                             <div class="aspect-square w-full bg-gray-50 border border-gray-200 flex items-center justify-center overflow-hidden shadow-inner">
                                 <span id="txtQRPlaceholder" class="text-[10px] text-center text-gray-400 font-bold px-1 leading-tight">📷 Scan QR</span>
-                                <img id="imgQR" class="w-full h-full object-cover hidden" alt="QR Payment">
+                                <img id="imgQR" class="w-full h-full object-cover hidden" alt="QR Payment" crossOrigin="anonymous">
                             </div>
                             <div class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-red-400 rounded-full text-[6px] flex items-center justify-center text-white font-black shadow-sm">⚽</div>
                         </div>
@@ -356,41 +356,53 @@
 
         updateItemsAndCalculateTotal();
 
-        // [จุดแก้ไขสำคัญ]: สคริปต์ดาวน์โหลดรูปภาพสลิปที่ผ่านการแก้บั๊ก ทำงานร่วมกับ Tailwind v4 ได้สมบูรณ์แบบ
+        // [จุดแก้ไขเฉพาะเจาะจง]: ฟังก์ชันบันทึกรูปภาพที่แก้ไขบั๊กเรนเดอร์ภาพ Base64 ของหน่วยความจำเรียบร้อย
         document.getElementById('btnDownload').addEventListener('click', function() {
             const boardDiv = document.getElementById('clipboardContainer');
             
-            // หน่วงเวลาสั้นๆ เพื่อให้ชัวร์ว่าเอฟเฟกต์ CSS v4 ประมวลผลเสร็จสิ้นก่อนเริ่มถ่ายรูปภาพสกรีน
-            setTimeout(() => {
-                html2canvas(boardDiv, {
-                    scale: 3, // ความละเอียดชัดคูณ 3
-                    useCORS: true,
-                    allowTaint: true,
-                    backgroundColor: null,
-                    logging: false
-                }).then(canvas => {
-                    try {
-                        const link = document.createElement('a');
-                        link.href = canvas.toDataURL('image/png');
-                        link.download = 'premium-diary-bill.png';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                    } catch (err) {
-                        // ซัพพอร์ตกรณีเบราวเซอร์บนโทรศัพท์มือถือบางรุ่นบล็อกปุ่มดาวน์โหลดอัตโนมัติ ให้เปิดรูปในแท็บใหม่แทนเพื่อเซฟมือ
-                        const dataUrl = canvas.toDataURL('image/png');
-                        const newWindow = window.open();
-                        if(newWindow) {
-                            newWindow.document.write(`<img src="${dataUrl}" alt="Bill Image" style="max-width:100%; height:auto;"/>`);
-                        } else {
-                            alert("⚠️ ไม่สามารถดาวน์โหลดอัตโนมัติได้ กรุณากดเปิดป๊อปอัปหรือลองใช้งานบนคอมพิวเตอร์นะคะ");
+            // สั่งบังคับให้ภาพต้นทางโหลดข้อมูลแคชเสร็จสิ้นสมบูรณ์
+            const imgs = boardDiv.getElementsByTagName('img');
+            const promises = [];
+            for (let img of imgs) {
+                if (img.src && !img.complete) {
+                    promises.push(new Promise(resolve => { img.onload = resolve; img.onerror = resolve; }));
+                }
+            }
+
+            Promise.all(promises).then(() => {
+                // หน่วงเวลาเซฟรูป 250ms เพื่อให้ระบบสไตล์ CSS ทำงานร่วมกับ html2canvas สำเร็จ
+                setTimeout(() => {
+                    html2canvas(boardDiv, {
+                        scale: 2, // ความคมชัดปกติรองรับขนาดบราวเซอร์สมาร์ทโฟน
+                        useCORS: true,
+                        allowTaint: true,
+                        logging: false,
+                        backgroundColor: null
+                    }).then(canvas => {
+                        try {
+                            const dataUrl = canvas.toDataURL('image/png');
+                            const link = document.createElement('a');
+                            link.href = dataUrl;
+                            link.download = 'premium-diary-bill.png';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        } catch (err) {
+                            // ซัพพอร์ตกรณี Webview ในแอปต่างๆ บล็อกคำสั่งดาวน์โหลดไฟล์อัตโนมัติ ให้ทำการเปิดภาพแท็บใหม่แทน
+                            const dataUrl = canvas.toDataURL('image/png');
+                            const newWindow = window.open();
+                            if(newWindow) {
+                                newWindow.document.write(`<img src="${dataUrl}" alt="Bill Image" style="max-width:100%; height:auto;"/>`);
+                            } else {
+                                alert("⚠️ บราวเซอร์นี้ปฏิเสธการเซฟอัตโนมัติ กรุณาลองเปิดบน Chrome หรือ Safari นะคะ");
+                            }
                         }
-                    }
-                }).catch(error => {
-                    console.error("html2canvas error:", error);
-                    alert("เกิดข้อผิดพลาดในการประมวลผลรูปภาพ กรุณาลองใหม่อีกครั้ง");
-                });
-            }, 100);
+                    }).catch(error => {
+                        console.error("html2canvas error:", error);
+                        alert("เกิดข้อผิดพลาดในการประมวลผลรูปภาพ กรุณาลองใหม่อีกครั้ง");
+                    });
+                }, 250);
+            });
         });
     </script>
 </body>
