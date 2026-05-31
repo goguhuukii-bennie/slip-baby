@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎨 ระบบเจนบิลไดอารี่โปรไฟล์สุดพรีเมียม 🧸</title>
-    <!-- นำเข้า Tailwind CSS v4 -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- นำเข้าฟอนต์ Mitr และ Itim -->
+    <script src="https://cdn.jsdelivr.net/permalink/v3.4.14/tailwindcss.js"></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500&family=Itim&display=swap" rel="stylesheet">
     
-    <!-- ไลบรารีสำหรับเซฟรูปภาพใบเสร็จ -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
@@ -65,7 +63,6 @@
 
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        <!-- ================= ฝั่งซ้าย: แผงควบคุม (Control Panel) ================= -->
         <div class="lg:col-span-5 bg-white/90 backdrop-blur-md p-6 rounded-3xl shadow-xl border-2 border-dashed border-[#7C604D] space-y-4 max-h-[95vh] overflow-y-auto">
             <div class="border-b-2 border-[#7C604D] pb-3">
                 <h2 class="text-xl font-bold text-[#5C4A3C] flex items-center gap-2">
@@ -74,7 +71,6 @@
                 <p class="text-xs text-amber-800 mt-0.5">เวอร์ชันอัปเกรดบาลานซ์สติกเกอร์และตกแต่งรอบตัวสลิปให้แน่นขึ้น</p>
             </div>
 
-            <!-- โซนอัปโหลดรูปภาพ -->
             <div class="grid grid-cols-2 gap-4 bg-amber-50/50 p-3 rounded-2xl border border-amber-200">
                 <div>
                     <label class="block text-xs font-bold text-amber-900 mb-1">🖼️ 1. รูปโลโก้/อวตารร้าน</label>
@@ -86,7 +82,6 @@
                 </div>
             </div>
 
-            <!-- ข้อมูลลูกค้าและหัวบิล -->
             <div class="space-y-2 bg-blue-50/40 p-3 rounded-2xl border border-blue-100">
                 <p class="text-xs font-bold text-blue-800 flex items-center gap-1">👤 ข้อมูลหัวสลิป</p>
                 <div class="grid grid-cols-2 gap-2">
@@ -99,7 +94,6 @@
                 </div>
             </div>
 
-            <!-- จัดการรายการสินค้า -->
             <div class="space-y-2 bg-pink-50/40 p-3 rounded-2xl border border-pink-100">
                 <div class="flex justify-between items-center mb-1">
                     <p class="text-xs font-bold text-pink-800">🛍️ รายการสินค้าที่สั่งซื้อ</p>
@@ -118,7 +112,6 @@
                 </div>
             </div>
 
-            <!-- ข้อมูลการเงิน -->
             <div class="space-y-2 bg-purple-50/40 p-3 rounded-2xl border border-purple-100">
                 <p class="text-xs font-bold text-purple-800">💳 ข้อมูลบัญชีธนาคารรับเงิน</p>
                 <div class="grid grid-cols-3 gap-2">
@@ -128,13 +121,11 @@
                 </div>
             </div>
 
-            <!-- ข้อความลิขสิทธิ์ / เครดิตท้ายบิล -->
             <div class="space-y-1.5 bg-amber-50/50 p-3 rounded-2xl border border-amber-200">
                 <label for="inputCopyright" class="block text-xs font-bold text-amber-900">📝 3. ข้อความลิขสิทธิ์ / เครดิตท้ายกระดาน</label>
                 <input type="text" id="inputCopyright" value="©MYSTIC STORY ©SOUNDWAVE STYLE CONVERT" placeholder="พิมพ์ชื่อเพจหรือข้อความลิขสิทธิ์ของคุณที่นี่..." class="w-full text-xs px-2 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-amber-600 font-mono">
             </div>
 
-            <!-- ปุ่มเซฟรูปภาพ -->
             <div class="pt-1">
                 <button id="btnDownload" class="w-full bg-gradient-to-r from-[#7C604D] to-[#5C4A3C] hover:from-[#634c3d] hover:to-[#46382e] text-white font-bold py-3.5 rounded-2xl text-xs tracking-wider transition shadow-md cursor-pointer">
                     💾 เซฟรูปภาพบิลไดอารี่สุดคิ้วท์ 📸
@@ -142,14 +133,11 @@
             </div>
         </div>
 
-        <!-- ================= ฝั่งขวา: พรีวิวบิลกระดานไดอารี่โปรไฟล์ (ตามแบบ image_6.png) ================= -->
         <div class="lg:col-span-7 flex flex-col items-center justify-start">
             <p class="text-xs text-amber-900/80 mb-3 tracking-wider font-bold">✨ พรีวิวใบเสร็จสไตล์ Profile Sheet (ถอดแบบภาพภาพจริง)</p>
             
-            <!-- ตัวกระดานชนวนหลัก -->
             <div id="clipboardContainer" class="diary-board w-full max-w-md p-6 pt-10 pb-8 overflow-hidden select-none">
                 
-                <!-- ตัวหนีบเหล็กด้านบน -->
                 <div class="metal-clip-loop"></div>
                 <div class="metal-clip flex justify-center items-center">
                     <div class="w-2.5 h-2.5 bg-[#444] rounded-full mx-1"></div>
@@ -157,7 +145,6 @@
                     <div class="w-2.5 h-2.5 bg-[#444] rounded-full mx-1"></div>
                 </div>
 
-                <!-- 🌟 [ตกแต่งเพิ่ม] สติกเกอร์ดาวซ้ายบน และ ตั๋วขวาบนเพื่อความบาลานซ์ -->
                 <div class="absolute top-8 left-4 text-xl transform -rotate-12 opacity-80 animate-pulse">🎵</div>
                 <div class="absolute top-16 left-8 text-xs transform rotate-45 opacity-60">✨</div>
                 
@@ -168,18 +155,14 @@
                     <div class="text-lg -rotate-12 -mt-4">📎</div>
                 </div>
 
-                <!-- หัวชื่อแบรนด์ร้านตรงกลางด้านบน -->
                 <div class="text-center mt-2 mb-4">
                     <h1 id="viewMainTitle" class="text-3xl font-black tracking-widest text-[#2E6B8E] uppercase">CYLU</h1>
                     <span id="viewSubTitle" class="text-[9px] font-bold tracking-widest text-gray-400 block uppercase -mt-1">ORDER RECEIPT</span>
                 </div>
 
-                <!-- 🧩 โซนด้านบน: แยกร่างซ้าย-ขวา -->
                 <div class="grid grid-cols-12 gap-3 items-start mt-2">
                     
-                    <!-- ฝั่งซ้าย: กล่องรูปภาพโลโก้ร้าน -->
                     <div class="col-span-5 relative bg-white border-2 border-[#7C604D] p-1.5 shadow-md transform -rotate-2">
-                        <!-- เทปใสแปะหัวโลโก้ -->
                         <div class="absolute -top-2 left-1/2 transform -translate-x-1/2 w-10 h-3.5 bg-blue-200/40 border border-blue-300/20 rotate-12"></div>
                         
                         <div class="aspect-square w-full bg-amber-50/40 border border-dashed border-amber-900/20 flex items-center justify-center overflow-hidden rounded-md">
@@ -189,9 +172,7 @@
                         <div class="text-center text-[9px] font-bold text-gray-400 mt-1 handwritten">@shop_owner</div>
                     </div>
 
-                    <!-- ฝั่งขวา: รายละเอียดข้อมูลลูกค้าบนเส้นประ -->
                     <div class="col-span-7 space-y-1.5 pt-1 relative">
-                        <!-- 🌟 [ตกแต่งเพิ่ม] สติกเกอร์ดอกไม้จิ๋วช่วยบาลานซ์พื้นที่ว่างด้านขวาหัวบิล -->
                         <div class="absolute -top-3 right-2 text-xs opacity-60">🌸</div>
                         
                         <div class="flex items-end border-b border-dashed border-[#7C604D]/40 pb-0.5">
@@ -209,7 +190,6 @@
                     </div>
                 </div>
 
-                <!-- 🌟 [ปรับปรุง] แถบคั่นกลางเพิ่มความแน่น มีไอคอนและสติกเกอร์กระจายตัวสวยงาม -->
                 <div class="flex justify-between items-center px-2 my-4 opacity-80 select-none">
                     <span class="text-base transform -rotate-12 hover:scale-12 forward">🎸</span>
                     <div class="border-b-2 border-dashed border-[#7C604D]/20 flex-1 mx-3"></div>
@@ -220,15 +200,11 @@
                     <span class="text-base transform rotate-12">🐯</span>
                 </div>
 
-                <!-- 🛍️ โซนตรงกลาง: รายการสินค้า -->
                 <div id="viewItemsContainer" class="space-y-3 min-h-[140px] px-1 relative">
-                    <!-- 🌟 [ตกแต่งเพิ่ม] สติกเกอร์เงาพื้นหลังจางๆ ไม่ให้สินค้าดูโล่งเกินไปเมื่อมีรายการน้อย -->
                     <div class="absolute top-1/2 left-1/4 -translate-y-1/2 text-5xl opacity-[0.03] select-none pointer-events-none">🎨🛍️✨</div>
                 </div>
 
-                <!-- 🔹 กล่องสรุปยอดรวมราคาสุทธิ -->
                 <div class="mt-5 bg-[#7C604D] text-white rounded-2xl p-3 flex justify-between items-center px-4 shadow-md relative">
-                    <!-- 🌟 [ตกแต่งเพิ่ม] เทปใสสีเหลืองพาสเทลแปะมุมกล่องราคาเพิ่มมิติไดอารี่ -->
                     <div class="absolute -top-1.5 left-6 w-8 h-3 bg-yellow-200/40 border border-yellow-300/20 -rotate-12"></div>
                     
                     <span class="font-bold text-xs tracking-widest opacity-90">NET TOTAL PRICE</span>
@@ -238,16 +214,12 @@
                     </div>
                 </div>
 
-                <!-- 🧩 โซนด้านล่างสุด: รายละเอียดการโอนเงินคู่คิวอาร์โค้ด -->
                 <div class="grid grid-cols-12 gap-2 mt-6 pt-4 border-t-2 border-dashed border-[#7C604D]/30 items-center relative">
                     
-                    <!-- 🌟 [ตกแต่งเพิ่ม] สติกเกอร์หัวใจดึงบาลานซ์น้ำหนักฝั่งซ้ายล่าง ไม่ให้โพลารอยด์ทางขวาหนักเกินไป -->
                     <div class="absolute -top-3 left-2 text-xs opacity-50">💖</div>
                     <div class="absolute bottom-2 left-[52%] text-sm opacity-40 transform rotate-12">🎵</div>
 
-                    <!-- ด้านซ้ายล่าง: บัญชีธนาคาร -->
-                    <div class="col-span-7 bg-white/70 rounded-xl p-2.5 border border-[#7C604D]/30 space-y-1 text-[11px] text-gray-700 leading-tight shadow-sm relative">
-                        <!-- เทปใสตกแต่งกล่องธนาคาร -->
+                    <div class="col-span-6 bg-white/70 rounded-xl p-2.5 border border-[#7C604D]/30 space-y-1 text-[11px] text-gray-700 leading-tight shadow-sm relative">
                         <div class="absolute -bottom-1 -left-2 w-6 h-2.5 bg-pink-200/40 border border-pink-300/20 rotate-45"></div>
                         
                         <span class="font-bold text-blue-900 flex items-center gap-1">💰 บัญชีรับเงิน:</span>
@@ -258,14 +230,12 @@
                         </div>
                     </div>
 
-                    <!-- ด้านขวาล่าง: รูปคิวอาร์โค้ดดีไซน์กรอบโพลารอยด์ -->
-                    <div class="col-span-5 flex justify-end">
-                        <div class="bg-white border border-gray-300 p-1.5 pb-4 shadow-xl transform rotate-6 w-24 relative hover:rotate-0 transition duration-300">
-                            <!-- เทปใสแปะหัวกรอบโพลารอยด์สไตล์งานทำมือ -->
+                    <div class="col-span-6 flex justify-end">
+                        <div class="bg-white border border-gray-300 p-1.5 pb-4 shadow-xl transform rotate-3 w-36 relative hover:rotate-0 transition duration-300">
                             <div class="absolute -top-2 left-3 w-7 h-3 bg-emerald-200/40 border border-emerald-300/20 -rotate-12"></div>
                             
                             <div class="aspect-square w-full bg-gray-50 border border-gray-200 flex items-center justify-center overflow-hidden shadow-inner">
-                                <span id="txtQRPlaceholder" class="text-[9px] text-center text-gray-400 font-bold px-1 leading-tight">📷 Scan QR</span>
+                                <span id="txtQRPlaceholder" class="text-[10px] text-center text-gray-400 font-bold px-1 leading-tight">📷 Scan QR</span>
                                 <img id="imgQR" class="w-full h-full object-cover hidden" alt="QR Payment">
                             </div>
                             <div class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-red-400 rounded-full text-[6px] flex items-center justify-center text-white font-black shadow-sm">⚽</div>
@@ -274,7 +244,6 @@
 
                 </div>
 
-                <!-- ข้อความเครดิต/ลิขสิทธิ์ท้ายกระดาน -->
                 <div id="viewCopyright" class="text-center text-[9px] text-gray-400/80 font-medium mt-6 tracking-wider uppercase">
                     ©MYSTIC STORY ©SOUNDWAVE STYLE CONVERT
                 </div>
@@ -284,7 +253,6 @@
 
     </div>
 
-    <!-- ================= ระบบซิงค์ข้อมูลและคำนวณราคาอัตโนมัติ ================= -->
     <script>
         function syncText(inputId, viewId, fallback) {
             const input = document.getElementById(inputId);
@@ -295,7 +263,6 @@
             });
         }
 
-        // เชื่อมโยงระบบแผงควบคุมฝั่งซ้าย ไปยังหน้าบิลพรีวิวฝั่งขวา
         syncText('inputMainTitle', 'viewMainTitle', 'CYLU');
         syncText('inputSubTitle', 'viewSubTitle', 'ORDER RECEIPT');
         syncText('inputClientName', 'viewClientName', 'คุณลูกค้าผู้น่ารัก');
@@ -310,7 +277,6 @@
         const btnAddItem = document.getElementById('btnAddItem');
         const viewTotal = document.getElementById('viewTotal');
 
-        // ฟังก์ชันสร้างและอัปเดตรายการสินค้าแบบไดนามิก รองรับชื่อยาวขึ้นบรรทัดใหม่
         function updateItemsAndCalculateTotal() {
             viewItemsContainer.innerHTML = ''; 
             const rows = itemsContainer.querySelectorAll('.item-row');
@@ -343,7 +309,6 @@
 
         itemsContainer.addEventListener('input', updateItemsAndCalculateTotal);
 
-        // ระบบลบแถวรายการ
         itemsContainer.addEventListener('click', function(e) {
             if (e.target.classList.contains('btn-delete-item')) {
                 const rows = itemsContainer.querySelectorAll('.item-row');
@@ -356,7 +321,6 @@
             }
         });
 
-        // ปุ่มเพิ่มแถวรายการสินค้า
         btnAddItem.addEventListener('click', function() {
             const newRow = document.createElement('div');
             newRow.className = 'grid grid-cols-12 gap-2 items-center item-row';
@@ -370,7 +334,6 @@
             updateItemsAndCalculateTotal();
         });
 
-        // ฟังก์ชันพรีวิวไฟล์รูปภาพ
         function handleFileSelect(inputId, imgId, placeholderId) {
             document.getElementById(inputId).addEventListener('change', function(e) {
                 const file = e.target.files[0];
@@ -390,25 +353,43 @@
         handleFileSelect('inputLogo', 'imgLogo', 'txtLogoPlaceholder');
         handleFileSelect('inputQR', 'imgQR', 'txtQRPlaceholder');
 
-        // สั่งคำนวณแถวสินค้าเริ่มต้นครั้งแรก
         updateItemsAndCalculateTotal();
 
-        // 📸 ฟังก์ชันเซฟรูปภาพใบเสร็จความละเอียดสูง 📸
+        // แก้ไขจุดที่ 2: ปรับปรุงโครงสร้างของ html2canvas สำหรับเรนเดอร์ภาพโลคอลให้ดาวน์โหลดได้ชัวร์ 100%
         document.getElementById('btnDownload').addEventListener('click', function() {
             const boardDiv = document.getElementById('clipboardContainer');
             
-            html2canvas(boardDiv, {
-                scale: 3, 
-                useCORS: true, 
-                backgroundColor: null 
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.href = canvas.toDataURL('image/png');
-                link.download = 'premium-balanced-bill.png';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            });
+            // หน่วงเวลาเล็กน้อยเพื่อให้เบราว์เซอร์จัดการโครงสร้างกล่องข้อความเรียบร้อย
+            setTimeout(() => {
+                html2canvas(boardDiv, {
+                    scale: 3, // เพิ่มความละเอียดคมชัดขึ้น 3 เท่า
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: null,
+                    logging: false
+                }).then(canvas => {
+                    try {
+                        const link = document.createElement('a');
+                        link.href = canvas.toDataURL('image/png');
+                        link.download = 'premium-diary-bill.png';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    } catch (err) {
+                        // ป้องกันกรณีเว็บบราว์เซอร์มือถือบล็อกการดาวน์โหลดอัตโนมัติ ให้ทำการเปิดหน้าต่างรูปภาพแท็บใหม่
+                        const dataUrl = canvas.toDataURL('image/png');
+                        const newWindow = window.open();
+                        if(newWindow) {
+                            newWindow.document.write(`<img src="${dataUrl}" alt="Bill Image" style="max-width:100%; height:auto;"/>`);
+                        } else {
+                            alert("⚠️ ไม่สามารถดาวน์โหลดอัตโนมัติได้ กรุณากดเปิดป๊อปอัปหรือลองใช้งานบนคอมพิวเตอร์นะคะ");
+                        }
+                    }
+                }).catch(error => {
+                    console.error("html2canvas error:", error);
+                    alert("เกิดข้อผิดพลาดในการประมวลผลรูปภาพ กรุณาลองใหม่อีกครั้ง");
+                });
+            }, 100);
         });
     </script>
 </body>
