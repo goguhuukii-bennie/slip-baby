@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎨 ระบบเจนบิลไดอารี่โปรไฟล์สุดพรีเมียม 🧸</title>
+    <!-- นำเข้า Tailwind CSS v4 -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- นำเข้าฟอนต์ Mitr และ Itim -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500&family=Itim&display=swap" rel="stylesheet">
+    
+    <!-- ไลบรารีสำหรับเซฟรูปภาพใบเสร็จ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        body { font-family: 'Mitr', sans-serif; }
+        .handwritten { font-family: 'Itim', cursive; }
+        
+        /* กระดานชนวนขอบมนหนาโค้งนวลตามแบบ image_6.png */
+        .diary-board {
+            background-color: #FDF9F3;
+            border: 4px solid #7C604D;
+            border-radius: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15), inset 0 0 20px rgba(124, 96, 77, 0.1);
+            position: relative;
+        }
+
+        /* ตัวหนีบเหล็กแบบสมจริงด้านบนบิล */
+        .metal-clip {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 45px;
+            background: linear-gradient(to bottom, #BFBFBF, #8C8C8C);
+            border: 3px solid #555;
+            border-radius: 6px;
+            z-index: 30;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .metal-clip-loop {
+            position: absolute;
+            top: -38px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 45px;
+            height: 25px;
+            border: 4px solid #555;
+            border-bottom: none;
+            border-radius: 15px 15px 0 0;
+        }
+
+        /* ลบลูกศรในช่อง input type="number" */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-[#FF9A9E] via-[#FECFEF] to-[#A1C4FD] min-h-screen p-4 md:p-8 text-gray-700">
+
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- ================= ฝั่งซ้าย: แผงควบคุม (Control Panel) ================= -->
+        <div class="lg:col-span-5 bg-white/90 backdrop-blur-md p-6 rounded-3xl shadow-xl border-2 border-dashed border-[#7C604D] space-y-4 max-h-[95vh] overflow-y-auto">
+            <div class="border-b-2 border-[#7C604D] pb-3">
+                <h2 class="text-xl font-bold text-[#5C4A3C] flex items-center gap-2">
+                    <span>🎨✨</span> แผงควบคุมระบบไดอารี่บิล
+                </h2>
+                <p class="text-xs text-amber-800 mt-0.5">เวอร์ชันอัปเกรดบาลานซ์สติกเกอร์และตกแต่งรอบตัวสลิปให้แน่นขึ้น</p>
+            </div>
+
+            <!-- โซนอัปโหลดรูปภาพ -->
+            <div class="grid grid-cols-2 gap-4 bg-amber-50/50 p-3 rounded-2xl border border-amber-200">
+                <div>
+                    <label class="block text-xs font-bold text-amber-900 mb-1">🖼️ 1. รูปโลโก้/อวตารร้าน</label>
+                    <input type="file" id="inputLogo" accept="image/*" class="block w-full text-[11px] text-gray-500 file:mr-1 file:py-1 file:px-2 file:rounded file:border-0 file:bg-amber-200 file:text-amber-800 hover:file:bg-amber-300 cursor-pointer"/>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-amber-900 mb-1">📸 2. รูป QR Code โอนเงิน</label>
+                    <input type="file" id="inputQR" accept="image/*" class="block w-full text-[11px] text-gray-500 file:mr-1 file:py-1 file:px-2 file:rounded file:border-0 file:bg-amber-200 file:text-amber-800 hover:file:bg-amber-300 cursor-pointer"/>
+                </div>
+            </div>
+
+            <!-- ข้อมูลลูกค้าและหัวบิล -->
+            <div class="space-y-2 bg-blue-50/40 p-3 rounded-2xl border border-blue-100">
+                <p class="text-xs font-bold text-blue-800 flex items-center gap-1">👤 ข้อมูลหัวสลิป</p>
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="text" id="inputMainTitle" value="CYLU SHOP" class="text-xs px-2 py-1.5 border border-gray-300 rounded-lg">
+                    <input type="text" id="inputSubTitle" value="ORDER RECEIPT" class="text-xs px-2 py-1.5 border border-gray-300 rounded-lg">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="text" id="inputClientName" value="คุณลูกค้าผู้น่ารัก" placeholder="ชื่อลูกค้า..." class="text-xs px-2 py-1.5 border border-gray-300 rounded-lg">
+                    <input type="text" id="inputDate" placeholder="วันที่ออกบิล..." class="text-xs px-2 py-1.5 border border-gray-300 rounded-lg">
+                </div>
+            </div>
+
+            <!-- จัดการรายการสินค้า -->
+            <div class="space-y-2 bg-pink-50/40 p-3 rounded-2xl border border-pink-100">
+                <div class="flex justify-between items-center mb-1">
+                    <p class="text-xs font-bold text-pink-800">🛍️ รายการสินค้าที่สั่งซื้อ</p>
+                    <button type="button" id="btnAddItem" class="text-[11px] bg-[#7C604D] hover:bg-[#634c3d] text-white font-bold py-1 px-2 rounded-md transition cursor-pointer">
+                        ➕ เพิ่มรายการ
+                    </button>
+                </div>
+
+                <div id="itemsContainer" class="space-y-2">
+                    <div class="grid grid-cols-12 gap-1.5 items-center item-row">
+                        <input type="number" class="col-span-2 text-xs px-1 py-1.5 text-center border border-gray-300 rounded-lg item-qty" value="1" min="1">
+                        <input type="text" class="col-span-6 text-xs px-2 py-1.5 border border-gray-300 rounded-lg item-name" value="commission Chibi Fullbody สเก็ตช์ลงสีพาสเทลฉากหลังโปร่งใส">
+                        <input type="number" class="col-span-3 text-xs px-2 py-1.5 text-right border border-gray-300 rounded-lg item-price" value="1250" min="0">
+                        <button type="button" class="col-span-1 text-center text-rose-500 font-bold btn-delete-item cursor-pointer">❌</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ข้อมูลการเงิน -->
+            <div class="space-y-2 bg-purple-50/40 p-3 rounded-2xl border border-purple-100">
+                <p class="text-xs font-bold text-purple-800">💳 ข้อมูลบัญชีธนาคารรับเงิน</p>
+                <div class="grid grid-cols-3 gap-2">
+                    <input type="text" id="inputBankName" value="ธนาคารไทยพาณิชย์" placeholder="ชื่อธนาคาร" class="text-xs px-2 py-1.5 border border-gray-300 rounded-lg">
+                    <input type="text" id="inputAccNumber" value="408-1-23456-7" placeholder="เลขที่บัญชี" class="text-xs px-2 py-1.5 border border-gray-300 rounded-lg">
+                    <input type="text" id="inputAccName" value="น.ส. ศุภพงษ์ แก้วดี" placeholder="ชื่อบัญชี" class="text-xs px-2 py-1.5 border border-gray-300 rounded-lg">
+                </div>
+            </div>
+
+            <!-- ข้อความลิขสิทธิ์ / เครดิตท้ายบิล -->
+            <div class="space-y-1.5 bg-amber-50/50 p-3 rounded-2xl border border-amber-200">
+                <label for="inputCopyright" class="block text-xs font-bold text-amber-900">📝 3. ข้อความลิขสิทธิ์ / เครดิตท้ายกระดาน</label>
+                <input type="text" id="inputCopyright" value="©MYSTIC STORY ©SOUNDWAVE STYLE CONVERT" placeholder="พิมพ์ชื่อเพจหรือข้อความลิขสิทธิ์ของคุณที่นี่..." class="w-full text-xs px-2 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-amber-600 font-mono">
+            </div>
+
+            <!-- ปุ่มเซฟรูปภาพ -->
+            <div class="pt-1">
+                <button id="btnDownload" class="w-full bg-gradient-to-r from-[#7C604D] to-[#5C4A3C] hover:from-[#634c3d] hover:to-[#46382e] text-white font-bold py-3.5 rounded-2xl text-xs tracking-wider transition shadow-md cursor-pointer">
+                    💾 เซฟรูปภาพบิลไดอารี่สุดคิ้วท์ 📸
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= ฝั่งขวา: พรีวิวบิลกระดานไดอารี่โปรไฟล์ (ตามแบบ image_6.png) ================= -->
+        <div class="lg:col-span-7 flex flex-col items-center justify-start">
+            <p class="text-xs text-amber-900/80 mb-3 tracking-wider font-bold">✨ พรีวิวใบเสร็จสไตล์ Profile Sheet (ถอดแบบภาพภาพจริง)</p>
+            
+            <!-- ตัวกระดานชนวนหลัก -->
+            <div id="clipboardContainer" class="diary-board w-full max-w-md p-6 pt-10 pb-8 overflow-hidden select-none">
+                
+                <!-- ตัวหนีบเหล็กด้านบน -->
+                <div class="metal-clip-loop"></div>
+                <div class="metal-clip flex justify-center items-center">
+                    <div class="w-2.5 h-2.5 bg-[#444] rounded-full mx-1"></div>
+                    <div class="w-16 h-1 bg-[#555] rounded mx-4"></div>
+                    <div class="w-2.5 h-2.5 bg-[#444] rounded-full mx-1"></div>
+                </div>
+
+                <!-- 🌟 [ตกแต่งเพิ่ม] สติกเกอร์ดาวซ้ายบน และ ตั๋วขวาบนเพื่อความบาลานซ์ -->
+                <div class="absolute top-8 left-4 text-xl transform -rotate-12 opacity-80 animate-pulse">🎵</div>
+                <div class="absolute top-16 left-8 text-xs transform rotate-45 opacity-60">✨</div>
+                
+                <div class="absolute top-7 right-6 flex items-center gap-1 opacity-90 scale-90">
+                    <div class="bg-amber-100 border-2 border-[#7C604D] px-2 py-0.5 text-[8px] font-black tracking-tighter text-[#7C604D] rounded rotate-6 shadow-sm">
+                        🎟️ LUCY TICKET
+                    </div>
+                    <div class="text-lg -rotate-12 -mt-4">📎</div>
+                </div>
+
+                <!-- หัวชื่อแบรนด์ร้านตรงกลางด้านบน -->
+                <div class="text-center mt-2 mb-4">
+                    <h1 id="viewMainTitle" class="text-3xl font-black tracking-widest text-[#2E6B8E] uppercase">CYLU</h1>
+                    <span id="viewSubTitle" class="text-[9px] font-bold tracking-widest text-gray-400 block uppercase -mt-1">ORDER RECEIPT</span>
+                </div>
+
+                <!-- 🧩 โซนด้านบน: แยกร่างซ้าย-ขวา -->
+                <div class="grid grid-cols-12 gap-3 items-start mt-2">
+                    
+                    <!-- ฝั่งซ้าย: กล่องรูปภาพโลโก้ร้าน -->
+                    <div class="col-span-5 relative bg-white border-2 border-[#7C604D] p-1.5 shadow-md transform -rotate-2">
+                        <!-- เทปใสแปะหัวโลโก้ -->
+                        <div class="absolute -top-2 left-1/2 transform -translate-x-1/2 w-10 h-3.5 bg-blue-200/40 border border-blue-300/20 rotate-12"></div>
+                        
+                        <div class="aspect-square w-full bg-amber-50/40 border border-dashed border-amber-900/20 flex items-center justify-center overflow-hidden rounded-md">
+                            <span id="txtLogoPlaceholder" class="text-[10px] text-center text-amber-950/40 font-bold px-1">✨ คลิกใส่รูป LOGO</span>
+                            <img id="imgLogo" class="w-full h-full object-cover hidden" alt="Shop Logo">
+                        </div>
+                        <div class="text-center text-[9px] font-bold text-gray-400 mt-1 handwritten">@shop_owner</div>
+                    </div>
+
+                    <!-- ฝั่งขวา: รายละเอียดข้อมูลลูกค้าบนเส้นประ -->
+                    <div class="col-span-7 space-y-1.5 pt-1 relative">
+                        <!-- 🌟 [ตกแต่งเพิ่ม] สติกเกอร์ดอกไม้จิ๋วช่วยบาลานซ์พื้นที่ว่างด้านขวาหัวบิล -->
+                        <div class="absolute -top-3 right-2 text-xs opacity-60">🌸</div>
+                        
+                        <div class="flex items-end border-b border-dashed border-[#7C604D]/40 pb-0.5">
+                            <span class="text-[10px] font-bold text-gray-400 w-12 uppercase">CLIENT:</span>
+                            <span id="viewClientName" class="handwritten text-base font-bold text-[#2E6B8E] pl-1 truncate flex-1">คุณลูกค้าผู้น่ารัก</span>
+                        </div>
+                        <div class="flex items-end border-b border-dashed border-[#7C604D]/40 pb-0.5">
+                            <span class="text-[10px] font-bold text-gray-400 w-12 uppercase">DATE:</span>
+                            <span id="viewDate" class="handwritten text-sm text-[#7C604D] pl-1 truncate flex-1">31/05/2026</span>
+                        </div>
+                        <div class="flex items-end border-b border-dashed border-[#7C604D]/40 pb-0.5">
+                            <span class="text-[10px] font-bold text-gray-400 w-12 uppercase">STATUS:</span>
+                            <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded ml-1 tracking-wider scale-90">PAID ✨</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 🌟 [ปรับปรุง] แถบคั่นกลางเพิ่มความแน่น มีไอคอนและสติกเกอร์กระจายตัวสวยงาม -->
+                <div class="flex justify-between items-center px-2 my-4 opacity-80 select-none">
+                    <span class="text-base transform -rotate-12 hover:scale-12 forward">🎸</span>
+                    <div class="border-b-2 border-dashed border-[#7C604D]/20 flex-1 mx-3"></div>
+                    <span class="text-sm bg-white px-3 py-0.5 rounded-full border border-[#7C604D] text-[10px] font-bold text-[#7C604D] shadow-sm tracking-widest flex items-center gap-1">
+                        ⭐️ ITEMS LIST ⭐️
+                    </span>
+                    <div class="border-b-2 border-dashed border-[#7C604D]/20 flex-1 mx-3"></div>
+                    <span class="text-base transform rotate-12">🐯</span>
+                </div>
+
+                <!-- 🛍️ โซนตรงกลาง: รายการสินค้า -->
+                <div id="viewItemsContainer" class="space-y-3 min-h-[140px] px-1 relative">
+                    <!-- 🌟 [ตกแต่งเพิ่ม] สติกเกอร์เงาพื้นหลังจางๆ ไม่ให้สินค้าดูโล่งเกินไปเมื่อมีรายการน้อย -->
+                    <div class="absolute top-1/2 left-1/4 -translate-y-1/2 text-5xl opacity-[0.03] select-none pointer-events-none">🎨🛍️✨</div>
+                </div>
+
+                <!-- 🔹 กล่องสรุปยอดรวมราคาสุทธิ -->
+                <div class="mt-5 bg-[#7C604D] text-white rounded-2xl p-3 flex justify-between items-center px-4 shadow-md relative">
+                    <!-- 🌟 [ตกแต่งเพิ่ม] เทปใสสีเหลืองพาสเทลแปะมุมกล่องราคาเพิ่มมิติไดอารี่ -->
+                    <div class="absolute -top-1.5 left-6 w-8 h-3 bg-yellow-200/40 border border-yellow-300/20 -rotate-12"></div>
+                    
+                    <span class="font-bold text-xs tracking-widest opacity-90">NET TOTAL PRICE</span>
+                    <div class="text-right flex items-baseline gap-1">
+                        <span id="viewTotal" class="handwritten text-2xl font-black text-[#FCD8A5]">1,250</span>
+                        <span class="text-[11px] font-bold text-amber-200">THB</span>
+                    </div>
+                </div>
+
+                <!-- 🧩 โซนด้านล่างสุด: รายละเอียดการโอนเงินคู่คิวอาร์โค้ด -->
+                <div class="grid grid-cols-12 gap-2 mt-6 pt-4 border-t-2 border-dashed border-[#7C604D]/30 items-center relative">
+                    
+                    <!-- 🌟 [ตกแต่งเพิ่ม] สติกเกอร์หัวใจดึงบาลานซ์น้ำหนักฝั่งซ้ายล่าง ไม่ให้โพลารอยด์ทางขวาหนักเกินไป -->
+                    <div class="absolute -top-3 left-2 text-xs opacity-50">💖</div>
+                    <div class="absolute bottom-2 left-[52%] text-sm opacity-40 transform rotate-12">🎵</div>
+
+                    <!-- ด้านซ้ายล่าง: บัญชีธนาคาร -->
+                    <div class="col-span-7 bg-white/70 rounded-xl p-2.5 border border-[#7C604D]/30 space-y-1 text-[11px] text-gray-700 leading-tight shadow-sm relative">
+                        <!-- เทปใสตกแต่งกล่องธนาคาร -->
+                        <div class="absolute -bottom-1 -left-2 w-6 h-2.5 bg-pink-200/40 border border-pink-300/20 rotate-45"></div>
+                        
+                        <span class="font-bold text-blue-900 flex items-center gap-1">💰 บัญชีรับเงิน:</span>
+                        <div class="space-y-0.5 pl-1">
+                            <p class="text-gray-500 font-medium">ธนาคาร: <span id="viewBankName" class="text-gray-800 font-bold">ไทยพาณิชย์</span></p>
+                            <p class="text-gray-500 font-medium">เลขบัญชี: <span id="viewAccNumber" class="handwritten text-sm text-amber-950 font-black">408-1-23456-7</span></p>
+                            <p class="text-gray-500 font-medium truncate">ชื่อบัญชี: <span id="viewAccName" class="text-gray-800 font-bold">น.ส. ศุภพงษ์ แก้วดี</span></p>
+                        </div>
+                    </div>
+
+                    <!-- ด้านขวาล่าง: รูปคิวอาร์โค้ดดีไซน์กรอบโพลารอยด์ -->
+                    <div class="col-span-5 flex justify-end">
+                        <div class="bg-white border border-gray-300 p-1.5 pb-4 shadow-xl transform rotate-6 w-24 relative hover:rotate-0 transition duration-300">
+                            <!-- เทปใสแปะหัวกรอบโพลารอยด์สไตล์งานทำมือ -->
+                            <div class="absolute -top-2 left-3 w-7 h-3 bg-emerald-200/40 border border-emerald-300/20 -rotate-12"></div>
+                            
+                            <div class="aspect-square w-full bg-gray-50 border border-gray-200 flex items-center justify-center overflow-hidden shadow-inner">
+                                <span id="txtQRPlaceholder" class="text-[9px] text-center text-gray-400 font-bold px-1 leading-tight">📷 Scan QR</span>
+                                <img id="imgQR" class="w-full h-full object-cover hidden" alt="QR Payment">
+                            </div>
+                            <div class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-red-400 rounded-full text-[6px] flex items-center justify-center text-white font-black shadow-sm">⚽</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ข้อความเครดิต/ลิขสิทธิ์ท้ายกระดาน -->
+                <div id="viewCopyright" class="text-center text-[9px] text-gray-400/80 font-medium mt-6 tracking-wider uppercase">
+                    ©MYSTIC STORY ©SOUNDWAVE STYLE CONVERT
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ================= ระบบซิงค์ข้อมูลและคำนวณราคาอัตโนมัติ ================= -->
+    <script>
+        function syncText(inputId, viewId, fallback) {
+            const input = document.getElementById(inputId);
+            const view = document.getElementById(viewId);
+            if(input.value) view.innerText = input.value;
+            input.addEventListener('input', () => {
+                view.innerText = input.value.trim() === '' ? fallback : input.value;
+            });
+        }
+
+        // เชื่อมโยงระบบแผงควบคุมฝั่งซ้าย ไปยังหน้าบิลพรีวิวฝั่งขวา
+        syncText('inputMainTitle', 'viewMainTitle', 'CYLU');
+        syncText('inputSubTitle', 'viewSubTitle', 'ORDER RECEIPT');
+        syncText('inputClientName', 'viewClientName', 'คุณลูกค้าผู้น่ารัก');
+        syncText('inputDate', 'viewDate', '31/05/2026');
+        syncText('inputBankName', 'viewBankName', 'ไทยพาณิชย์');
+        syncText('inputAccNumber', 'viewAccNumber', '408-1-23456-7');
+        syncText('inputAccName', 'viewAccName', 'น.ส. ศุภพงษ์ แก้วดี');
+        syncText('inputCopyright', 'viewCopyright', '©MYSTIC STORY ©SOUNDWAVE STYLE CONVERT');
+
+        const itemsContainer = document.getElementById('itemsContainer');
+        const viewItemsContainer = document.getElementById('viewItemsContainer');
+        const btnAddItem = document.getElementById('btnAddItem');
+        const viewTotal = document.getElementById('viewTotal');
+
+        // ฟังก์ชันสร้างและอัปเดตรายการสินค้าแบบไดนามิก รองรับชื่อยาวขึ้นบรรทัดใหม่
+        function updateItemsAndCalculateTotal() {
+            viewItemsContainer.innerHTML = ''; 
+            const rows = itemsContainer.querySelectorAll('.item-row');
+            let grandTotal = 0;
+            
+            rows.forEach((row) => {
+                const qtyVal = parseFloat(row.querySelector('.item-qty').value) || 1;
+                const nameVal = row.querySelector('.item-name').value || 'รายการสินค้า...';
+                const priceVal = parseFloat(row.querySelector('.item-price').value) || 0;
+
+                const rowTotal = qtyVal * priceVal;
+                grandTotal += rowTotal;
+
+                const viewRow = document.createElement('div');
+                viewRow.className = 'flex justify-between items-start text-xs font-medium border-b border-dashed border-[#7C604D]/30 pb-1.5 text-gray-700 gap-4 relative z-10';
+                viewRow.innerHTML = `
+                    <div class="flex items-start gap-1.5 flex-1 min-w-0">
+                        <span class="text-blue-500 mt-0.5 shrink-0">🔹</span>
+                        <span class="break-words whitespace-normal text-gray-800 leading-relaxed flex-1">
+                            ${nameVal} <span class="text-[10px] text-gray-400 font-bold ml-1 italic">(x${qtyVal})</span>
+                        </span>
+                    </div>
+                    <span class="handwritten text-base font-black text-[#7C604D] shrink-0 min-w-[60px] text-right">${rowTotal.toLocaleString()}</span>
+                `;
+                viewItemsContainer.appendChild(viewRow);
+            });
+
+            viewTotal.innerText = grandTotal.toLocaleString();
+        }
+
+        itemsContainer.addEventListener('input', updateItemsAndCalculateTotal);
+
+        // ระบบลบแถวรายการ
+        itemsContainer.addEventListener('click', function(e) {
+            if (e.target.classList.contains('btn-delete-item')) {
+                const rows = itemsContainer.querySelectorAll('.item-row');
+                if(rows.length > 1) {
+                    e.target.closest('.item-row').remove();
+                    updateItemsAndCalculateTotal();
+                } else {
+                    alert('⚠️ ต้องมีรายการสินค้าอย่างน้อย 1 รายการบนบิลนะคะ');
+                }
+            }
+        });
+
+        // ปุ่มเพิ่มแถวรายการสินค้า
+        btnAddItem.addEventListener('click', function() {
+            const newRow = document.createElement('div');
+            newRow.className = 'grid grid-cols-12 gap-2 items-center item-row';
+            newRow.innerHTML = `
+                <input type="number" class="col-span-2 text-xs px-1 py-1.5 text-center border border-gray-300 rounded-lg item-qty" value="1" min="1">
+                <input type="text" class="col-span-6 text-xs px-2 py-1.5 border border-gray-300 rounded-lg item-name" placeholder="ระบุรายการชิ้นต่อไป...">
+                <input type="number" class="col-span-3 text-xs px-2 py-1.5 text-right border border-gray-300 rounded-lg item-price" placeholder="ราคา" min="0">
+                <button type="button" class="col-span-1 text-center text-rose-500 font-bold btn-delete-item cursor-pointer">❌</button>
+            `;
+            itemsContainer.appendChild(newRow);
+            updateItemsAndCalculateTotal();
+        });
+
+        // ฟังก์ชันพรีวิวไฟล์รูปภาพ
+        function handleFileSelect(inputId, imgId, placeholderId) {
+            document.getElementById(inputId).addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const img = document.getElementById(imgId);
+                        const placeholder = document.getElementById(placeholderId);
+                        img.src = event.target.result;
+                        img.classList.remove('hidden');
+                        if(placeholder) placeholder.classList.add('hidden');
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        handleFileSelect('inputLogo', 'imgLogo', 'txtLogoPlaceholder');
+        handleFileSelect('inputQR', 'imgQR', 'txtQRPlaceholder');
+
+        // สั่งคำนวณแถวสินค้าเริ่มต้นครั้งแรก
+        updateItemsAndCalculateTotal();
+
+        // 📸 ฟังก์ชันเซฟรูปภาพใบเสร็จความละเอียดสูง 📸
+        document.getElementById('btnDownload').addEventListener('click', function() {
+            const boardDiv = document.getElementById('clipboardContainer');
+            
+            html2canvas(boardDiv, {
+                scale: 3, 
+                useCORS: true, 
+                backgroundColor: null 
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = 'premium-balanced-bill.png';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        });
+    </script>
+</body>
+</html>
